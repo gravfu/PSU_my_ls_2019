@@ -5,11 +5,15 @@
 ** All upercase to lowercase
 */
 
+char *my_strdup(char const *src);
+
 char *my_strlowcase(char *str)
 {
+    char *str_cpy = my_strdup(str);
+
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] >= 'A' && str[i] <= 'Z')
-            str[i] = str[i] + 32;
+            str_cpy[i] = str[i] + 32;
     }
-    return str;
+    return str_cpy;
 }

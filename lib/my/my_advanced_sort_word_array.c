@@ -5,7 +5,7 @@
 ** Advancerd Sort Word array
 */
 
-#include "./include/my.h"
+char *my_strlowcase(char *str);
 
 int my_aswa_len(char **tab)
 {
@@ -26,7 +26,7 @@ void my_aswa_swap_str(char **str_one, char **str_two)
 
 void my_aswa_swap(char **array, int j, int(*cmp)(char const *, char const *))
 {
-    if (cmp(array[j], array[j+1]) > 0) {
+    if (cmp(my_strlowcase(array[j]), my_strlowcase(array[j+1])) > 0) {
         my_aswa_swap_str(&array[j], &array[j + 1]);
     }
 }

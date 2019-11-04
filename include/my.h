@@ -56,5 +56,8 @@ char **my_str_to_word_array(char const *str);
 int my_check_number_of_words(char const *str);
 int my_str_to_word_array_len(int *len_a, int *len_b, char const *str, int i);
 void my_str_to_word_a_print(char const *str, int len, int *word, char **dest);
+int my_advanced_sort_word_array(char **tab,
+                                int(*cmp)(char const *, char const *));
+int my_strcmp_inv(char const *s1, char const *s2);
 
 #endif /* MY_H_ */

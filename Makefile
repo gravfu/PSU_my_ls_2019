@@ -9,7 +9,9 @@ CC		=	gcc
 
 FLAGS		=	-Werror -Wall -Wextra
 
-SRC		=	main.c
+SRC		=	main.c \
+			directory.c \
+			my_advanced_sort_word_array.c
 
 OBJ     	=       $(SRC:.c=.o)
 

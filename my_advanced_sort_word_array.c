@@ -5,7 +5,7 @@
 ** Advancerd Sort Word array
 */
 
-char *my_strlowcase(char *str);
+#include "./include/my.h"
 
 int my_aswa_len(char **tab)
 {

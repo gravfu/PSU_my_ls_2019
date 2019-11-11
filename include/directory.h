@@ -6,4 +6,4 @@
 */
 
 void open_directory(char const *directory, int const *params);
-void my_ls_l(char **tab, int const *arg, char const *dir_const);
+void my_ls_l(char **tab, int const *arg, char const *dir_const, int is_file);

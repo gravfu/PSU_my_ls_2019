@@ -12,19 +12,21 @@
 #include "./include/my.h"
 #include "./include/directory.h"
 
-
-/* TO DO
-
-char **my_realloc_with_value(char **to_cpy, char *str)
+char **my_realloc_s(char **to_cpy, char *str, int j)
 {
-    char **tab = malloc(sizeof(to_cpy) + 1);
+    int i;
+    char **tab = malloc(sizeof(char *) * (j + 2));
 
-    for (int i = 0; tab[i] != NULL; i++) {
+    for (i = 0; to_cpy[i] != NULL; i++)
+        tab[i] = my_strdup(to_cpy[i]);
+    tab[i] = str;
+    tab[i+1] = NULL;
+    if (to_cpy != NULL)
+        free(to_cpy);
+    return tab;
+}
 
-    }
-} */
-
-void my_print_ls(char **tab, char const *directory, int const *params)
+void my_print_ls(char **tab, char const *directory, int const *params, int is_file)
 {
     if (params[4] == 1)
         my_advanced_sort_word_array(tab, &my_strcmp_inv);
@@ -40,7 +42,7 @@ void my_print_ls(char **tab, char const *directory, int const *params)
         //my_ls_l(tab, params, directory);
 
     if (params[1] == 1)
-        my_ls_l(tab, params, directory);
+        my_ls_l(tab, params, directory, is_file);
     else {
         for(int i = 0; tab[i] != NULL; i++) {
             my_putstr(tab[i]);
@@ -53,22 +55,28 @@ void open_directory(char const *directory, int const *params)
 {
     DIR *dir;
     struct dirent *sd = NULL;
-    char **tab = malloc(sizeof(char *) * 9999999);
+    char **tab = malloc(sizeof(char *) * 1);
     int i = 0;
 
-    dir = opendir(directory);
+    tab[0] = NULL;
+        dir = opendir(directory);
     if (dir == NULL) {
-        my_putstr("ls: cannot access 'fdf': No such file or directory\n");
-        exit (84);
-    }
-    sd = readdir(dir);
-    while (sd != NULL) {
-        if (sd->d_name[0] != '.') {
-            tab[i] = sd->d_name;
-            i++;
-        }
+        tab = my_realloc_s(tab, directory, 0);
+        i++;
+        //my_putstr("ls: cannot access 'fdf': No such file or directory\n");
+        tab[i] = NULL;
+        my_print_ls(tab, directory, params, 1);
+    } else {
         sd = readdir(dir);
+        while (sd != NULL) {
+            if (sd->d_name[0] != '.') {
+                tab = my_realloc_s(tab, sd->d_name, i);
+                i++;
+            }
+            if (dir != NULL)
+                sd = readdir(dir);
+        }
+        tab[i] = NULL;
+        my_print_ls(tab, directory, params, 0);
     }
-    tab[i] = NULL;
-    my_print_ls(tab, directory, params);
 }

@@ -28,7 +28,8 @@ char **my_realloc_s(char **to_cpy, char const *str, int j)
     return tab;
 }
 
-void my_print_ls(char **tab, char const *directory, int const *params, int is_file)
+void my_print_ls(char **tab, char const *directory, int const *params,
+                int is_file)
 {
     if (params[4] == 1)
         my_advanced_sort_word_array(tab, &my_strcmp_inv);
@@ -43,7 +44,7 @@ void my_print_ls(char **tab, char const *directory, int const *params, int is_fi
     if (params[1] == 1)
         my_ls_l(tab, params, directory, is_file);
     else {
-        for(int i = 0; tab[i] != NULL; i++) {
+        for (int i = 0; tab[i] != NULL; i++) {
             my_putstr(tab[i]);
             my_putchar('\n');
         }

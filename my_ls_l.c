@@ -83,7 +83,6 @@ void print_perm(struct stat *sb, char *str)
     i++;
     for (; file_modif[i] != ':' && file_modif[i] != '\0'; i++)
         my_putchar(file_modif[i]);
-    //my_putstr(file_modif);
 }
 
 void my_ls_l_two(char *str, int const *arg, char const *dir_const, int is_file)
@@ -112,7 +111,8 @@ void my_ls_l_two(char *str, int const *arg, char const *dir_const, int is_file)
     }
 }
 
-int my_ls_get_blocks(char **tab, int const *arg, char const *dir_const, int is_file)
+int my_ls_get_blocks(char **tab, int const *arg, char const *dir_const,
+                    int is_file)
 {
     char *file;
     struct stat sb;

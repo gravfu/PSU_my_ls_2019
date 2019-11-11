@@ -39,7 +39,7 @@ void check_params_two(int *params, char *str)
 
 void check_params(int *params, int ac, char **av)
 {
-    for(int i = 0; i < ac; i++) {
+    for (int i = 0; i < ac; i++) {
         if (av[i][0] == '-')
             check_params_two(params, &av[i][1]);
     }
@@ -51,17 +51,17 @@ int main(int argc, char **argv)
     int check_nothing = 0;
 
     check_params(params, argc, argv);
-    if (argc == 1)
+    if (argc == 1) {
         open_directory(".", params);
-    else {
-        for(int i = 1; i < argc; i++) {
-            if (argv[i][0] != '-') {
-                open_directory(argv[i], params);
-                check_nothing = 1;
-            }
-        }
-        if (check_nothing == 0)
-            open_directory(".", params);
+        return 0;
     }
+    for (int i = 1; i < argc; i++) {
+        if (argv[i][0] != '-') {
+            open_directory(argv[i], params);
+            check_nothing = 1;
+        }
+    }
+    if (check_nothing == 0)
+        open_directory(".", params);
     return 0;
 }

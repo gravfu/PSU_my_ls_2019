@@ -12,14 +12,16 @@
 #include "./include/my.h"
 #include "./include/directory.h"
 
-char **my_realloc_s(char **to_cpy, char *str, int j)
+char **my_realloc_s(char **to_cpy, char const *str, int j)
 {
     int i;
     char **tab = malloc(sizeof(char *) * (j + 2));
 
-    for (i = 0; to_cpy[i] != NULL; i++)
+    for (i = 0; to_cpy[i] != NULL; i++) {
         tab[i] = my_strdup(to_cpy[i]);
-    tab[i] = str;
+        free(to_cpy[i]);
+    }
+    tab[i] = my_strdup(str);
     tab[i+1] = NULL;
     if (to_cpy != NULL)
         free(to_cpy);

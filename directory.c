@@ -40,9 +40,6 @@ void my_print_ls(char **tab, char const *directory, int const *params, int is_fi
         my_putstr("TO DO\n");
     if (params[5] == 1)
         my_putstr("TO DO\n");
-    //if (params[1] == 1)
-        //my_ls_l(tab, params, directory);
-
     if (params[1] == 1)
         my_ls_l(tab, params, directory, is_file);
     else {
@@ -65,7 +62,6 @@ void open_directory(char const *directory, int const *params)
     if (dir == NULL) {
         tab = my_realloc_s(tab, directory, 0);
         i++;
-        //my_putstr("ls: cannot access 'fdf': No such file or directory\n");
         tab[i] = NULL;
         my_print_ls(tab, directory, params, 1);
     } else {

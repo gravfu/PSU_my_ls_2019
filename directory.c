@@ -6,11 +6,14 @@
 */
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include "./include/my.h"
 #include "./include/directory.h"
+
+int my_ls_t(char **tab, char const *dir, int is_file);
 
 char **my_realloc_s(char **to_cpy, char const *str, int j)
 {
@@ -31,22 +34,30 @@ char **my_realloc_s(char **to_cpy, char const *str, int j)
 void my_print_ls(char **tab, char const *directory, int const *params,
                 int is_file)
 {
+    struct stat sb;
+
+    my_advanced_sort_word_array(tab, &my_strcmp);
+    if (params[5] == 1)
+        my_ls_t(tab, directory, is_file);
     if (params[4] == 1)
         my_advanced_sort_word_array(tab, &my_strcmp_inv);
-    else
-        my_advanced_sort_word_array(tab, &my_strcmp);
     if (params[2] == 1)
         my_putstr("TO DO\n");
     if (params[3] == 1)
-        my_putstr("TO DO\n");
-    if (params[5] == 1)
         my_putstr("TO DO\n");
     if (params[1] == 1)
         my_ls_l(tab, params, directory, is_file);
     else {
         for (int i = 0; tab[i] != NULL; i++) {
-            my_putstr(tab[i]);
-            my_putchar('\n');
+            if(stat(tab[i], &sb) != 0) {
+                my_putstr("ls: cannot access '");
+                my_putstr(tab[i]);
+                my_putstr("': No such file or directory\n");
+            }
+            else {
+                my_putstr(tab[i]);
+                my_putchar('\n');
+            }
         }
     }
 }

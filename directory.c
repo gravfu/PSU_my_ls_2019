@@ -59,7 +59,7 @@ void open_directory(char const *directory, int const *params)
     int i = 0;
 
     tab[0] = NULL;
-        dir = opendir(directory);
+    dir = opendir(directory);
     if (dir == NULL) {
         tab = my_realloc_s(tab, directory, 0);
         i++;

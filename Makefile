@@ -12,7 +12,8 @@ FLAGS		=	-Werror -Wall -Wextra
 SRC		=	main.c \
 			directory.c \
 			my_ls_l.c \
-			my_advanced_sort_word_array.c
+			my_advanced_sort_word_array.c \
+			my_ls_l_print.c
 
 OBJ     	=       $(SRC:.c=.o)
 

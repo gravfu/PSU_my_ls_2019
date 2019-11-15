@@ -76,7 +76,7 @@ void my_ls_l(char **tab, int const *arg, char const *dir_const, int is_file)
 
     if (is_file == 0) {
         nb_block = my_ls_get_blocks(tab, arg, dir_const, is_file);
-        my_putstr("Total: ");
+        my_putstr("total ");
         my_put_nbr(nb_block/2);
         my_putchar('\n');
     }

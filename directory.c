@@ -35,26 +35,23 @@ void my_print_ls(char **tab, char const *directory, int const *params,
                 int is_file)
 {
     struct stat sb;
+    int error;
 
     my_advanced_sort_word_array(tab, &my_strcmp);
     if (params[5] == 1)
         my_ls_t(tab, directory, is_file);
     if (params[4] == 1)
         my_advanced_sort_word_array(tab, &my_strcmp_inv);
-    if (params[2] == 1)
-        my_putstr("TO DO\n");
-    if (params[3] == 1)
-        my_putstr("TO DO\n");
     if (params[1] == 1)
         my_ls_l(tab, params, directory, is_file);
     else {
         for (int i = 0; tab[i] != NULL; i++) {
-            if(stat(tab[i], &sb) != 0) {
+            error = stat(tab[i], &sb);
+            if(error == -1 && is_file == 1) {
                 my_putstr("ls: cannot access '");
                 my_putstr(tab[i]);
                 my_putstr("': No such file or directory\n");
-            }
-            else {
+            } else {
                 my_putstr(tab[i]);
                 my_putchar('\n');
             }
@@ -71,7 +68,11 @@ void open_directory(char const *directory, int const *params)
 
     tab[0] = NULL;
     dir = opendir(directory);
-    if (dir == NULL) {
+    if (params[2] == 1) {
+        my_putstr(directory);
+        my_putstr(":\n");
+    }
+    if (dir == NULL || params[3] == 1) {
         tab = my_realloc_s(tab, directory, 0);
         i++;
         tab[i] = NULL;
@@ -88,5 +89,22 @@ void open_directory(char const *directory, int const *params)
         }
         tab[i] = NULL;
         my_print_ls(tab, directory, params, 0);
+    }
+    if (params[2] == 1) {
+        int error;
+        struct stat sb;
+        char *file = NULL;
+        for (int i = 0; tab[i] != NULL; i++){
+            file = tab[i];
+            tab[i] = my_strdup(directory);
+            tab[i] = my_strcat(tab[i], "/");
+            tab[i] = my_strcat(tab[i], file);
+        }
+        for (int i = 0; tab[i] != NULL && (stat(tab[i], &sb) != -1); i++){
+            if (sb.st_mode & S_IFDIR) {
+                my_putstr("\n");
+                open_directory(tab[i], params);
+            }
+        }
     }
 }

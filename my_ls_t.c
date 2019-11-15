@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2019
-** my_advanced_sort_word_array.c
+** my_ls_t.c
 ** File description:
-** Advancerd Sort Word array
+** ls -t
 */
 
 #include <sys/types.h>

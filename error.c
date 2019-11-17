@@ -35,7 +35,7 @@ int my_error_handle(char const *av, int error)
         return 84;
     }
     if (error == 21) {
-        my_putstr_error("ls: option requires an argument -- '");
+        my_putstr_error("option requires an argument -- '");
         my_putstr_error(av);
         my_putstr_error("'\nTry 'ls --help' for more information.\n");
         return 84;

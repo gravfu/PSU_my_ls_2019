@@ -83,7 +83,7 @@ char **read_directory_one(int *error, char const *directory,
     tab[1] = NULL;
     error2 = stat(tab[0], &sb);
     if (error2 != -1) {
-        if(my_print_ls(tab, directory, params, 1) == 84)
+        if (my_print_ls(tab, directory, params, 1) == 84)
             *error = 84;
     } else {
         *error = 84;

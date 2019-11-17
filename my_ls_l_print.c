@@ -85,7 +85,6 @@ void my_ls_l_print_three(struct stat *sb)
     my_putchar(' ');
 }
 
-
 void my_ls_l_print_four(struct stat *sb)
 {
     time_t *the_time = &sb->st_mtime;

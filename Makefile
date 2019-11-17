@@ -14,7 +14,10 @@ SRC		=	main.c \
 			my_ls_l.c \
 			my_advanced_sort_word_array.c \
 			my_ls_l_print.c \
-			my_ls_t.c
+			my_ls_t.c \
+			my_ls_r.c \
+			my_ls_std.c \
+			error.c
 
 OBJ     	=       $(SRC:.c=.o)
 
@@ -37,7 +40,7 @@ all:		$(NAME)
 
 $(NAME):	$(OBJ)
 		make -C $(LIB_FOLDER)
-		$(CC) -o $(NAME) $(OBJ) -I$(INCLUDE) -L$(LIB_FOLDER) -l$(LIB_NAME) $(FLAGS)
+		$(CC) -o $(NAME) $(SRC) -I$(INCLUDE) -L$(LIB_FOLDER) -l$(LIB_NAME) $(FLAGS) -g3
 
 clean:
 		rm -f $(OBJ)

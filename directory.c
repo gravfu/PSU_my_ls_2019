@@ -13,8 +13,6 @@
 #include "./include/my.h"
 #include "./include/directory.h"
 
-int my_ls_t(char **tab, char const *dir, int is_file);
-
 char **my_realloc_s(char **to_cpy, char const *str, int j)
 {
     int i;
@@ -24,87 +22,94 @@ char **my_realloc_s(char **to_cpy, char const *str, int j)
         tab[i] = my_strdup(to_cpy[i]);
         free(to_cpy[i]);
     }
-    tab[i] = my_strdup(str);
-    tab[i+1] = NULL;
     if (to_cpy != NULL)
         free(to_cpy);
+    tab[i] = my_strdup(str);
+    tab[i+1] = NULL;
     return tab;
 }
 
-void my_print_ls(char **tab, char const *directory, int const *params,
+int my_print_ls(char **tab, char const *directory, int const *params,
                 int is_file)
 {
-    struct stat sb;
-    int error;
+    int error = 0;
 
     my_advanced_sort_word_array(tab, &my_strcmp);
     if (params[5] == 1)
         my_ls_t(tab, directory, is_file);
     if (params[4] == 1)
         my_advanced_sort_word_array(tab, &my_strcmp_inv);
-    if (params[1] == 1)
-        my_ls_l(tab, params, directory, is_file);
-    else {
-        for (int i = 0; tab[i] != NULL; i++) {
-            error = stat(tab[i], &sb);
-            if(error == -1 && is_file == 1) {
-                my_putstr("ls: cannot access '");
-                my_putstr(tab[i]);
-                my_putstr("': No such file or directory\n");
-            } else {
-                my_putstr(tab[i]);
-                my_putchar('\n');
-            }
-        }
-    }
+    if (params[1] == 1) {
+        if (my_ls_l(tab, directory, is_file) == 84)
+            error = 84;
+    } else
+        tab = my_ls_std(tab, is_file, &error);
+    return error;
 }
 
-void open_directory(char const *directory, int const *params)
+
+char **read_directory_two(int *error, DIR *dir, char const *directory,
+                        int const *params)
 {
-    DIR *dir;
+    char **tab = malloc(sizeof(char *) * 2);
     struct dirent *sd = NULL;
-    char **tab = malloc(sizeof(char *) * 1);
     int i = 0;
 
     tab[0] = NULL;
+    tab[1] = NULL;
+    sd = readdir(dir);
+    while (sd != NULL) {
+    if (sd->d_name[0] != '.') {
+        tab = my_realloc_s(tab, sd->d_name, i);
+        i++;
+    }
+    if (dir != NULL)
+        sd = readdir(dir);
+    }
+    tab[i] = NULL;
+    if (my_print_ls(tab, directory, params, 0) == 84)
+        *error = 84;
+    return tab;
+}
+
+char **read_directory_one(int *error, char const *directory,
+                            int const *params)
+{
+    char **tab = malloc(sizeof(char *) * 2);
+    int error2;
+    struct stat sb;
+
+    tab[0] = my_strdup(directory);
+    tab[1] = NULL;
+    error2 = stat(tab[0], &sb);
+    if (error2 != -1) {
+        if(my_print_ls(tab, directory, params, 1) == 84)
+            *error = 84;
+    } else {
+        *error = 84;
+        my_error_handle(directory, 2);
+    }
+    return tab;
+}
+
+int open_directory(char const *directory, int const *params)
+{
+    DIR *dir;
+    int error = 0;
+    char **tab = NULL;
+
     dir = opendir(directory);
     if (params[2] == 1) {
         my_putstr(directory);
         my_putstr(":\n");
     }
     if (dir == NULL || params[3] == 1) {
-        tab = my_realloc_s(tab, directory, 0);
-        i++;
-        tab[i] = NULL;
-        my_print_ls(tab, directory, params, 1);
+        tab = read_directory_one(&error, directory, params);
     } else {
-        sd = readdir(dir);
-        while (sd != NULL) {
-            if (sd->d_name[0] != '.') {
-                tab = my_realloc_s(tab, sd->d_name, i);
-                i++;
-            }
-            if (dir != NULL)
-                sd = readdir(dir);
-        }
-        tab[i] = NULL;
-        my_print_ls(tab, directory, params, 0);
+        tab = read_directory_two(&error, dir, directory, params);
     }
-    if (params[2] == 1) {
-        int error;
-        struct stat sb;
-        char *file = NULL;
-        for (int i = 0; tab[i] != NULL; i++){
-            file = tab[i];
-            tab[i] = my_strdup(directory);
-            tab[i] = my_strcat(tab[i], "/");
-            tab[i] = my_strcat(tab[i], file);
-        }
-        for (int i = 0; tab[i] != NULL && (stat(tab[i], &sb) != -1); i++){
-            if (sb.st_mode & S_IFDIR) {
-                my_putstr("\n");
-                open_directory(tab[i], params);
-            }
-        }
-    }
+    if (params[2] == 1)
+        if (my_ls_r(tab, directory, params) == 84)
+            error = 84;
+    return error;
 }

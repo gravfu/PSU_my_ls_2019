@@ -38,6 +38,17 @@ void my_ls_l_print_one(struct stat *sb)
         break;
     }
 }
+void my_ls_l_print_two_t(struct stat *sb)
+{
+    if ((sb->st_mode & S_ISVTX) && (sb->st_mode & S_IXOTH))
+        my_putstr("t");
+    if ((sb->st_mode & S_ISVTX) && !(sb->st_mode & S_IXOTH))
+        my_putstr("T");
+    if (!(sb->st_mode & S_ISVTX) && (sb->st_mode & S_IXOTH))
+        my_putstr("x");
+    if (!(sb->st_mode & S_ISVTX) && !(sb->st_mode & S_IXOTH))
+        my_putstr("-");
+}
 
 void my_ls_l_print_two(struct stat *sb)
 {
@@ -49,12 +60,7 @@ void my_ls_l_print_two(struct stat *sb)
     my_putstr(sb->st_mode & S_IXGRP ? 	"x" : "-");
     my_putstr(sb->st_mode & S_IROTH ? 	"r" : "-");
     my_putstr(sb->st_mode & S_IWOTH ? 	"w" : "-");
-    if (sb->st_mode & S_ISVTX)
-        my_putstr("t");
-    else if (sb->st_mode & S_IXOTH)
-        my_putstr("x");
-    else
-        my_putstr("-");
+    my_ls_l_print_two_t(sb);
     my_putchar(' ');
     my_put_nbr(sb->st_nlink);
     my_putchar(' ');

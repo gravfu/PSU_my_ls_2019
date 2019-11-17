@@ -26,14 +26,10 @@ void check_params_two(int *params, char *str)
             break;
         case 't' : params[5] = 1;
             break;
-        default: params[0] = 1;
+        default: my_error_handle(str, 21);
+            exit(84);
             break;
         }
-    }
-    if (params[0] != 0)
-    {
-        my_putstr("CHECK YOUR FUCKING PARAMS\n");
-        exit(84);
     }
 }
 
@@ -49,6 +45,7 @@ int main(int argc, char **argv)
 {
     int params[6] = {0, 0, 0, 0, 0, 0};
     int check_nothing = 0;
+    int error = 0;
 
     check_params(params, argc, argv);
     if (argc == 1) {
@@ -57,11 +54,12 @@ int main(int argc, char **argv)
     }
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] != '-') {
-            open_directory(argv[i], params);
+            if (open_directory(my_strdup(argv[i]), params) == 84)
+                error = 84;
             check_nothing = 1;
         }
     }
     if (check_nothing == 0)
         open_directory(".", params);
-    return 0;
+    return error;
 }

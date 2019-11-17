@@ -18,7 +18,7 @@ char **my_ls_std(char **tab, int is_file, int *error)
 
     for (int i = 0; tab[i] != NULL; i++) {
         error2 = stat(tab[i], &sb);
-        if(error2 == -1 && is_file == 1) {
+        if (error2 == -1 && is_file == 1) {
             my_error_handle(tab[i], 2);
             *error = 84;
         } else {

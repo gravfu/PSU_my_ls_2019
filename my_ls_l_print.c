@@ -38,6 +38,7 @@ void my_ls_l_print_one(struct stat *sb)
         break;
     }
 }
+
 void my_ls_l_print_two_t(struct stat *sb)
 {
     if ((sb->st_mode & S_ISVTX) && (sb->st_mode & S_IXOTH))

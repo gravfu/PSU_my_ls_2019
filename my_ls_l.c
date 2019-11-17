@@ -26,21 +26,17 @@ int my_ls_l_two(char *str, char const *dir_const, int is_file)
     struct stat sb;
     char *file = my_strdup(dir_const);
     int error = 0;
-
     if (is_file == 0) {
         file = my_strcat(file, "/");
         file = my_strcat(file, str);
     }
-    int error2 = stat(file, &sb);
-    if (error2 != -1) {
+    if (stat(file, &sb) != -1) {
         print_perm(&sb);
         my_putchar(' ');
         my_putstr(str);
         my_putchar('\n');
     } else {
-        my_putstr("ls: cannot access '");
-        my_putstr(str);
-        my_putstr("': No such file or directory\n");
+        my_error_handle(str, 2);
         error = 84;
     }
     if (file != NULL) {

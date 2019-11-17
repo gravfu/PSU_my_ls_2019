@@ -40,7 +40,7 @@ all:		$(NAME)
 
 $(NAME):	$(OBJ)
 		make -C $(LIB_FOLDER)
-		$(CC) -o $(NAME) $(SRC) -I$(INCLUDE) -L$(LIB_FOLDER) -l$(LIB_NAME) $(FLAGS) -g3
+		$(CC) -o $(NAME) $(OBJ) -I$(INCLUDE) -L$(LIB_FOLDER) -l$(LIB_NAME) $(FLAGS)
 
 clean:
 		rm -f $(OBJ)

@@ -1,5 +1,10 @@
 # Epitech Project
+
 The goal was to do a clone of ls  
+
+Date: November 2019
+
+Language: C
 
 Grade: A  
 
